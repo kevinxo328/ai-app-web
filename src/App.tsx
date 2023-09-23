@@ -1,10 +1,10 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./App.css";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useGetUser } from "./apis/api";
+import AppLayout from "./components/app/app-layout";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -13,7 +13,7 @@ function App() {
   console.log(data, error);
 
   return (
-    <>
+    <AppLayout aside={<p>123</p>}>
       <div>
         <Link to="/chatbot">Go To Chatbot</Link>
         <a href="https://vitejs.dev" target="_blank">
@@ -35,7 +35,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-    </>
+    </AppLayout>
   );
 }
 
