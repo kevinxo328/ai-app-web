@@ -16,4 +16,9 @@ export default defineConfig({
     setupFiles: ["./__test__/setup.ts"],
     globals: true,
   },
+  build: {
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
+  },
 });
