@@ -10,10 +10,10 @@ describe("App", () => {
     render(
       <MemoryRouter>
         <App />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     const headline = screen.getByText(
-      /Click on the Vite and React logos to learn more/i
+      /Click on the Vite and React logos to learn more/i,
     );
     expect(headline).toBeInTheDocument();
   });

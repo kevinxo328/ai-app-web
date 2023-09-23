@@ -9,7 +9,7 @@ describe("Chatbot", () => {
     render(
       <MemoryRouter>
         <Chatbot />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     const headline = screen.getByText(/Chatbot/i);
     expect(headline).toBeInTheDocument();
