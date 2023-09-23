@@ -6,6 +6,10 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "types": ["node", "jest", "@testing-library/jest-dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",
