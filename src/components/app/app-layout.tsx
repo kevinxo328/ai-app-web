@@ -1,8 +1,6 @@
-import { ReactNode } from "react";
-
 type Props = {
-  aside?: ReactNode;
-  children?: ReactNode;
+  aside?: JSX.Element;
+  children?: JSX.Element;
 };
 
 const AppLayout = (props: Props) => {

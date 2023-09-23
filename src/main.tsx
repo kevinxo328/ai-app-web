@@ -6,6 +6,7 @@ import router from "./router/router";
 import { worker } from "@/mocks/browser";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "./lib/reactQuery";
+import { ThemeProvider } from "./contexts/themeContexts";
 
 if (process.env.NODE_ENV === "development") {
   worker.start({
@@ -16,7 +17,9 @@ if (process.env.NODE_ENV === "development") {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );
