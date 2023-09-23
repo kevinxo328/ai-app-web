@@ -1,0 +1,5 @@
+# https://prettier.io/docs/en/ignore
+**/node_modules
+**/.git
+**/.vscode
+**/.idea
