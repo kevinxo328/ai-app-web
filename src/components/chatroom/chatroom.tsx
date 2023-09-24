@@ -18,6 +18,7 @@ type Props = {
   chatroom: ChatroomState;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 };
 
 const Chatroom = (props: Props) => {
@@ -39,6 +40,7 @@ const Chatroom = (props: Props) => {
           value={props.chatroom.input}
           onChange={props.onChange}
           onKeyDown={props.onKeyDown}
+          disabled={props.disabled}
         />
       </div>
     </div>

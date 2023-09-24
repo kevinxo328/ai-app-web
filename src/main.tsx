@@ -7,6 +7,7 @@ import { worker } from "@/mocks/browser";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "./lib/reactQuery";
 import { ThemeProvider } from "./contexts/theme-context";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 if (process.env.NODE_ENV === "development") {
   worker.start({
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
       </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>
 );
