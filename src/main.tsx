@@ -6,7 +6,7 @@ import router from "./router/router";
 import { worker } from "@/mocks/browser";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "./lib/reactQuery";
-import { ThemeProvider } from "./contexts/themeContexts";
+import { ThemeProvider } from "./contexts/theme-context";
 
 if (process.env.NODE_ENV === "development") {
   worker.start({
