@@ -1,9 +1,9 @@
 import { usePostOpenAI } from "@/apis/api";
-import Chatroom, { ChatroomState } from "@/components/chatroom/chatroom";
+import ChatRoom, { ChatRoomState } from "@/components/chatroom/chat-room";
 import { useState } from "react";
 
 const Chatbot = () => {
-  const [chatroom, setChatroom] = useState<ChatroomState>({
+  const [chatRoom, setChatRoom] = useState<ChatRoomState>({
     chats: [],
     input: "",
   });
@@ -11,7 +11,7 @@ const Chatbot = () => {
   const postOpenAI = usePostOpenAI({
     onSuccess: (res) => {
       const { data } = res;
-      setChatroom((pre) => ({
+      setChatRoom((pre) => ({
         chats: [...pre.chats, { role: "ai", message: data?.message }],
         input: "",
       }));
@@ -19,23 +19,23 @@ const Chatbot = () => {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChatroom((pre) => ({ ...pre, input: e.target.value }));
+    setChatRoom((pre) => ({ ...pre, input: e.target.value }));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key.toLowerCase() !== "enter") return;
-    setChatroom((pre) => ({
+    setChatRoom((pre) => ({
       chats: [...pre.chats, { role: "human", message: pre.input }],
       input: "",
     }));
 
-    postOpenAI.mutate(chatroom.input);
+    postOpenAI.mutate(chatRoom.input);
   };
 
   return (
     <>
-      <Chatroom
-        chatroom={chatroom}
+      <ChatRoom
+        chatRoom={chatRoom}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         disabled={postOpenAI.isLoading}

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import ChatMessage from "@/components/chatroom/chat-message";
-import { Chat } from "@/components/chatroom/chatroom";
+import { Chat } from "@/components/chatroom/chat-room";
 
 const props: Chat = {
   role: "ai",

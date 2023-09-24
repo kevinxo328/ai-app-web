@@ -9,24 +9,24 @@ export type Chat = {
   message: string;
 };
 
-export type ChatroomState = {
+export type ChatRoomState = {
   chats: Chat[];
   input: string;
 };
 
 type Props = {
-  chatroom: ChatroomState;
+  chatRoom: ChatRoomState;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   disabled?: boolean;
 };
 
-const Chatroom = (props: Props) => {
+const ChatRoom = (props: Props) => {
   const containerStyle = "max-w-[1300px] w-full";
   return (
     <div className="w-full max-h-screen h-screen overflow-auto flex flex-col items-center space-y-8 py-8">
       <ScrollArea className="w-full flex-grow-1 h-full">
-        {props.chatroom.chats.map((chat, index) => (
+        {props.chatRoom.chats.map((chat, index) => (
           <div
             key={chat.message + index}
             className={`${containerStyle} mx-auto mb-4`}
@@ -37,7 +37,7 @@ const Chatroom = (props: Props) => {
       </ScrollArea>
       <div className={`${containerStyle}`}>
         <Input
-          value={props.chatroom.input}
+          value={props.chatRoom.input}
           onChange={props.onChange}
           onKeyDown={props.onKeyDown}
           disabled={props.disabled}
@@ -47,4 +47,4 @@ const Chatroom = (props: Props) => {
   );
 };
 
-export default Chatroom;
+export default ChatRoom;

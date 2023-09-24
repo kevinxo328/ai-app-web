@@ -1,4 +1,4 @@
-import { Chat } from "./chatroom";
+import { Chat } from "./chat-room";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 type Props = Chat;
