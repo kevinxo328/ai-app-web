@@ -1,17 +1,22 @@
 import { render, screen } from "@testing-library/react";
 import ChatBot from "@/pages/ChatBot";
 import { MemoryRouter } from "react-router-dom";
+import { QueryClientProvider } from "react-query";
+import { queryClient } from "@/lib/reactQuery";
 
 // https://dev.to/pacheco/configure-vitest-with-react-testing-library-5cbb
 // https://stackoverflow.com/questions/57861187/property-tobeinthedocument-does-not-exist-on-type-matchersany
-describe("Chatbot", () => {
-  it("renders headline", () => {
+
+describe("ChatBot", () => {
+  it("renders input", async () => {
     render(
       <MemoryRouter>
-        <ChatBot />
+        <QueryClientProvider client={queryClient}>
+          <ChatBot />
+        </QueryClientProvider>
       </MemoryRouter>
     );
-    const headline = screen.getByText(/Chatbot/i);
-    expect(headline).toBeInTheDocument();
+    const input = await screen.findByPlaceholderText("輸入文字");
+    expect(input).toBeInTheDocument();
   });
 });

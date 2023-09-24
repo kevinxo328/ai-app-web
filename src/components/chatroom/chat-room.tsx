@@ -41,6 +41,7 @@ const ChatRoom = (props: Props) => {
           onChange={props.onChange}
           onKeyDown={props.onKeyDown}
           disabled={props.disabled}
+          placeholder="輸入文字"
         />
       </div>
     </div>
