@@ -29,7 +29,7 @@ const Chatroom = (props: Props) => {
         {props.chatroom.chats.map((chat, index) => (
           <div
             key={chat.message + index}
-            className={`${containerStyle} mx-auto`}
+            className={`${containerStyle} mx-auto mb-4`}
           >
             <ChatMessage role={chat.role} message={chat.message} />
           </div>
