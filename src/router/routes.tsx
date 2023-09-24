@@ -1,5 +1,5 @@
 import App from "@/App";
-import Chatbot from "@/pages/Chatbot";
+import ChatBot from "@/pages/ChatBot";
 import Login from "@/pages/Login";
 import { RouteObject } from "react-router-dom";
 
@@ -14,7 +14,7 @@ const routes: RouteObject[] = [
       },
       {
         path: "chatbot",
-        element: <Chatbot />,
+        element: <ChatBot />,
       },
     ],
   },

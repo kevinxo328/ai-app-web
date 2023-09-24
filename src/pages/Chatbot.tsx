@@ -2,7 +2,7 @@ import { usePostOpenAI } from "@/apis/api";
 import ChatRoom, { ChatRoomState } from "@/components/chatroom/chat-room";
 import { useState } from "react";
 
-const Chatbot = () => {
+const ChatBot = () => {
   const [chatRoom, setChatRoom] = useState<ChatRoomState>({
     chats: [],
     input: "",
@@ -44,4 +44,4 @@ const Chatbot = () => {
   );
 };
 
-export default Chatbot;
+export default ChatBot;

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Chatbot from "@/pages/Chatbot";
+import ChatBot from "@/pages/ChatBot";
 import { MemoryRouter } from "react-router-dom";
 
 // https://dev.to/pacheco/configure-vitest-with-react-testing-library-5cbb
@@ -8,8 +8,8 @@ describe("Chatbot", () => {
   it("renders headline", () => {
     render(
       <MemoryRouter>
-        <Chatbot />
-      </MemoryRouter>,
+        <ChatBot />
+      </MemoryRouter>
     );
     const headline = screen.getByText(/Chatbot/i);
     expect(headline).toBeInTheDocument();
