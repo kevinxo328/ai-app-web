@@ -1,20 +1,23 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import ChatBot from "@/pages/ChatBot";
 import { MemoryRouter } from "react-router-dom";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "@/lib/reactQuery";
+import { userEvent } from "@testing-library/user-event";
 
 // https://dev.to/pacheco/configure-vitest-with-react-testing-library-5cbb
 // https://stackoverflow.com/questions/57861187/property-tobeinthedocument-does-not-exist-on-type-matchersany
 
 describe("ChatBot", () => {
+  const user = userEvent.setup();
+
   beforeEach(() => {
     render(
       <MemoryRouter>
         <QueryClientProvider client={queryClient}>
           <ChatBot />
         </QueryClientProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
   });
 
@@ -24,14 +27,16 @@ describe("ChatBot", () => {
   });
 
   it("input text", async () => {
-    const input = await screen.findByPlaceholderText("輸入文字") as HTMLInputElement;
+    const input = (await screen.findByPlaceholderText(
+      "輸入文字",
+    ));
     const test = "測試123";
 
-    fireEvent.change(input, { target: { value: test } });
-    expect(input.value).toBe(test);
+    await user.type(input, test);
+    expect(input).toHaveValue(test);
 
-    fireEvent.keyDown(input, {key: 'Enter', code: 'Enter', charCode: 13})
-    expect(input.value).toBe('');
+    await user.keyboard('{Enter}');
+    expect(input).toHaveValue("");
 
     const target = await screen.findByText(test);
     expect(target).toBeInTheDocument();
