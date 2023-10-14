@@ -8,7 +8,7 @@ export const handlers = [
 
     return res(
       // Respond with a 200 status code
-      ctx.status(200),
+      ctx.status(200)
     );
   }),
 
@@ -22,7 +22,7 @@ export const handlers = [
         ctx.status(403),
         ctx.json({
           errorMessage: "Not authorized",
-        }),
+        })
       );
     }
 
@@ -31,18 +31,18 @@ export const handlers = [
       ctx.status(200),
       ctx.json({
         username: "admin",
-      }),
+      })
     );
   }),
 
-  rest.post(getApiUrl("/openai"), (req, res, ctx) => {
-    const text = req.url.searchParams.get("text");
+  rest.post(getApiUrl("/openai/chat_completion"), (req, res, ctx) => {
+    const text = req.url.searchParams.get("message");
     return res(
       ctx.status(200),
       ctx.delay(2000),
       ctx.json({
-        message: text,
-      }),
+        content: text,
+      })
     );
   }),
 ];

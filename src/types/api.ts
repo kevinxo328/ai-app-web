@@ -16,5 +16,6 @@ export type MutationOptions<ResponseData> =
   | undefined;
 
 export type ResOpenAI = {
-  message: string;
+  res: Record<string, unknown>;
+  content: string;
 };

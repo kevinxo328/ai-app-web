@@ -9,9 +9,11 @@ export function useGetUser() {
 }
 
 export function usePostOpenAI(options?: MutationOptions<ResOpenAI>) {
-  return useMutation(async (text: string) => {
+  return useMutation(async (message: string) => {
     const query = new URLSearchParams();
-    query.append("text", text);
-    return await apiClient.post(getApiUrl(`/openai?${query.toString()}`));
+    query.append("message", message);
+    return await apiClient.post(
+      getApiUrl(`/openai/chat_completion?${query.toString()}`)
+    );
   }, options);
 }

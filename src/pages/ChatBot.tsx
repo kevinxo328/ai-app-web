@@ -12,7 +12,7 @@ const ChatBot = () => {
     onSuccess: (res) => {
       const { data } = res;
       setChatRoom((pre) => ({
-        chats: [...pre.chats, { role: "ai", message: data?.message }],
+        chats: [...pre.chats, { role: "ai", message: data?.content }],
         input: "",
       }));
     },
