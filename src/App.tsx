@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AppLayout from "./components/app/app-layout";
 import AppAside from "./components/app/app-aside";
 import { Outlet, useLocation } from "react-router-dom";
@@ -8,14 +9,20 @@ function App() {
   const location = useLocation();
 
   const [asideItems, setAsideItems] = useState([
-    { label: "home", path: "/", active: false },
+    // { label: "home", path: "/", active: false },
     {
-      label: "chatbot",
+      label: "ChatBot",
       path: "/chatbot",
       active: false,
     },
-    { label: "login", path: "/login", active: false },
+    // { label: "login", path: "/login", active: false },
   ]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate("/chatbot");
+  }, []);
 
   useEffect(() => {
     setAsideItems((pre) =>

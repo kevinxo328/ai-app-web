@@ -8,10 +8,10 @@ const routes: RouteObject[] = [
     path: "/",
     element: <App />,
     children: [
-      {
-        path: "login",
-        element: <Login />,
-      },
+      // {
+      //   path: "login",
+      //   element: <Login />,
+      // },
       {
         path: "chatbot",
         element: <ChatBot />,
