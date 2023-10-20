@@ -22,7 +22,7 @@ function App() {
 
   useEffect(() => {
     navigate("/chatbot");
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     setAsideItems((pre) =>
