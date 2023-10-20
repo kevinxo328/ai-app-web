@@ -16,6 +16,18 @@ const ChatBot = () => {
         input: "",
       }));
     },
+    onError: (err) => {
+      setChatRoom((pre) => ({
+        chats: [
+          ...pre.chats,
+          {
+            role: "ai",
+            message: err?.response?.data?.detail || "系統錯誤，請聯絡管理員",
+          },
+        ],
+        input: "",
+      }));
+    },
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
