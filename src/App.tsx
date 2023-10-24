@@ -1,41 +1,48 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { useGetUser } from "./apis/api";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AppLayout from "./components/app/app-layout";
+import AppAside from "./components/app/app-aside";
+import { Outlet, useLocation } from "react-router-dom";
+import ThemeToggle from "@/components/theme-toggle";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const { data, error } = useGetUser();
+  const location = useLocation();
 
-  console.log(data, error);
+  const [asideItems, setAsideItems] = useState([
+    // { label: "home", path: "/", active: false },
+    {
+      label: "ChatBot",
+      path: "/chatbot",
+      active: false,
+    },
+    // { label: "login", path: "/login", active: false },
+  ]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate("/chatbot");
+  }, [navigate]);
+
+  useEffect(() => {
+    setAsideItems((pre) =>
+      pre.map((item) => ({ ...item, active: item.path === location.pathname }))
+    );
+  }, [location]);
+
+  const aside = (
+    <div className="p-4">
+      <div className="mb-4">
+        <ThemeToggle />
+      </div>
+      <AppAside items={asideItems} />
+    </div>
+  );
 
   return (
-    <>
-      <div>
-        <Link to="/chatbot">Go To Chatbot</Link>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <Button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <AppLayout aside={aside}>
+      <Outlet />
+    </AppLayout>
   );
 }
 

@@ -1,17 +1,18 @@
 import { rest } from "msw";
+import { getApiUrl } from "@/lib/apiClient.ts";
 
 export const handlers = [
-  rest.post("/login", (req, res, ctx) => {
+  rest.post("/login", (_req, res, ctx) => {
     // Persist user's authentication in the session
     sessionStorage.setItem("is-authenticated", "true");
 
     return res(
       // Respond with a 200 status code
-      ctx.status(200),
+      ctx.status(200)
     );
   }),
 
-  rest.get("/user", (req, res, ctx) => {
+  rest.get("/user", (_req, res, ctx) => {
     // Check if the user is authenticated in this session
     const isAuthenticated = sessionStorage.getItem("is-authenticated");
 
@@ -21,7 +22,7 @@ export const handlers = [
         ctx.status(403),
         ctx.json({
           errorMessage: "Not authorized",
-        }),
+        })
       );
     }
 
@@ -30,7 +31,18 @@ export const handlers = [
       ctx.status(200),
       ctx.json({
         username: "admin",
-      }),
+      })
+    );
+  }),
+
+  rest.post(getApiUrl("/openai/chat_completion"), (req, res, ctx) => {
+    const text = req.url.searchParams.get("message");
+    return res(
+      ctx.status(200),
+      ctx.delay(2000),
+      ctx.json({
+        content: text,
+      })
     );
   }),
 ];
