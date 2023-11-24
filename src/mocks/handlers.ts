@@ -36,8 +36,10 @@ export const handlers = [
     );
   }),
 
-  rest.post(getApiUrl("/openai/chat_completion"), (req, res, ctx) => {
-    const text = req.url.searchParams.get("message");
+  rest.post(getApiUrl("/openai/chat_completion"), async (req, res, ctx) => {
+    const body = await req.json();
+    const text = body?.user_prompt;
+
     const json: ResChatCompletion = {
       choices: [
         {

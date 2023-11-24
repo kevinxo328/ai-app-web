@@ -7,12 +7,16 @@ export type GlobalError = {
   detail: string;
 };
 
-export type MutationOptions<ResponseData, ErrorData = GlobalError> =
+export type MutationOptions<
+  ResponseData,
+  RequestData = string,
+  ErrorData = GlobalError,
+> =
   | Omit<
       UseMutationOptions<
         AxiosResponse<ResponseData>,
         AxiosError<ErrorData>,
-        string,
+        RequestData,
         unknown
       >,
       "mutationFn"
@@ -30,6 +34,13 @@ export type QueryOptions<ResponseData, ErrorData = GlobalError> =
       "queryKey" | "queryFn"
     >
   | undefined;
+
+export type ReqChatCompletion = {
+  user_prompt: string;
+  temperature?: number;
+  system_prompt?: string;
+  model?: string;
+};
 
 export type ResChatCompletion = {
   id?: string;

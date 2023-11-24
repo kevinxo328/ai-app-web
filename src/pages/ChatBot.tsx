@@ -51,7 +51,7 @@ const ChatBot = () => {
       input: "",
     }));
 
-    postChatCompletion.mutate(chatRoom.input);
+    postChatCompletion.mutate({ user_prompt: chatRoom.input });
   };
 
   return (

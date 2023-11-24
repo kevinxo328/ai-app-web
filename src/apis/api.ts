@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "react-query";
 import { apiClient, getApiUrl } from "@/lib/apiClient.ts";
 import {
   MutationOptions,
+  ReqChatCompletion,
   // QueryOptions,
   // ResModels,
   ResChatCompletion,
@@ -14,15 +15,12 @@ export function useGetUser() {
 }
 
 export function usePostChatCompletion(
-  options?: MutationOptions<ResChatCompletion>
+  options?: MutationOptions<ResChatCompletion, ReqChatCompletion>
 ) {
-  return useMutation(async (message: string, temperature: number = 0) => {
-    const query = new URLSearchParams();
-    query.append("message", message);
-    query.append("temperature", temperature.toString());
-    return await apiClient.post(
-      getApiUrl(`/openai/chat_completion?${query.toString()}`)
-    );
+  return useMutation(async (data: ReqChatCompletion) => {
+    return await apiClient.post(getApiUrl(`/openai/chat_completion`), {
+      ...data,
+    });
   }, options);
 }
 
