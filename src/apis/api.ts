@@ -23,10 +23,10 @@ export function usePostOpenAI(options?: MutationOptions<ResOpenAI>) {
   }, options);
 }
 
-export function useGetModels(options?: QueryOptions<ResModels>) {
-  return useQuery(
-    "/openai/models",
-    async () => await apiClient.get(getApiUrl(`/openai/models`)),
-    options
-  );
-}
+// export function useGetModels(options?: QueryOptions<ResModels>) {
+//   return useQuery(
+//     "/openai/models",
+//     async () => await apiClient.get(getApiUrl(`/openai/models`)),
+//     options
+//   );
+// }
