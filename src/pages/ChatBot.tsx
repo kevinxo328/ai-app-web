@@ -3,7 +3,7 @@ import ChatRoom, {
   ChatRoomState,
   RoleEnum,
 } from "@/components/chatroom/chat-room";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -31,6 +31,8 @@ const ChatBot = () => {
     sys_prompt: defaultSysPrompt,
     stream: true,
   });
+
+  const isComposition = useRef(false);
 
   const postChatCompletion = usePostChatCompletion({
     onSuccess: (res) => {
@@ -62,7 +64,7 @@ const ChatBot = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key.toLowerCase() !== "enter") return;
+    if (e.key.toLowerCase() !== "enter" || isComposition.current) return;
     setChatRoom((pre) => ({
       chats: [...pre.chats, { role: RoleEnum.human, message: pre.input }],
       input: "",
@@ -76,15 +78,13 @@ const ChatBot = () => {
     setChatRoom((pre) => ({ ...pre, input: "" }));
 
     if (llmParams.stream) {
+      setIsStreaming(true);
       return fetchEventSource(getApiUrl(`/openai/chat_completion`), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-        async onopen() {
-          setIsStreaming(true);
-        },
         async onmessage(msg) {
           setChatRoom((pre) => {
             const history = [...pre.chats];
@@ -120,6 +120,9 @@ const ChatBot = () => {
           chatRoom={chatRoom}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
+          onComposition={(e) =>
+            (isComposition.current = e.type !== "compositionend")
+          }
           disabled={postChatCompletion.isLoading || isStreaming}
         />
       </div>
