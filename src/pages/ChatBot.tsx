@@ -73,6 +73,8 @@ const ChatBot = () => {
       ...llmParams,
     };
 
+    setChatRoom((pre) => ({ ...pre, input: "" }));
+
     if (llmParams.stream) {
       return fetchEventSource(getApiUrl(`/openai/chat_completion`), {
         method: "POST",
@@ -97,8 +99,8 @@ const ChatBot = () => {
             }
 
             return {
-              ...pre,
               chats: [...history],
+              input: "",
             };
           });
         },
