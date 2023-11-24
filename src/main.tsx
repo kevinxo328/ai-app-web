@@ -9,14 +9,14 @@ import { queryClient } from "./lib/reactQuery";
 import { ThemeProvider } from "./contexts/theme-context";
 import { ReactQueryDevtools } from "react-query/devtools";
 
-// if (
-//   process.env.NODE_ENV === "development" &&
-//   import.meta.env.VITE_API_URL.indexOf("http://") > -1
-// ) {
-//   worker.start({
-//     onUnhandledRequest: "bypass",
-//   });
-// }
+if (
+  process.env.NODE_ENV === "development" &&
+  import.meta.env.VITE_API_URL.indexOf("http://") > -1
+) {
+  worker.start({
+    onUnhandledRequest: "bypass",
+  });
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
