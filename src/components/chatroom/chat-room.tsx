@@ -2,10 +2,13 @@ import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
 import ChatMessage from "./chat-message";
 
-export type Role = "ai" | "human";
+export enum RoleEnum {
+  ai = "ai",
+  human = "human",
+}
 
 export type Chat = {
-  role: Role;
+  role: keyof typeof RoleEnum;
   message: string;
 };
 
@@ -22,14 +25,14 @@ type Props = {
 };
 
 const ChatRoom = (props: Props) => {
-  const containerStyle = "max-w-[1300px] w-full";
+  const containerStyle = "max-w-[1300px]";
   return (
     <div className="w-full max-h-screen h-screen overflow-auto flex flex-col items-center space-y-8 py-8">
       <ScrollArea className="w-full flex-grow-1 h-full">
         {props.chatRoom.chats.map((chat, index) => (
           <div
             key={chat.message + index}
-            className={`${containerStyle} mx-auto mb-4`}
+            className={`${containerStyle} w-full mx-auto mb-4`}
           >
             <ChatMessage role={chat.role} message={chat.message} />
           </div>
