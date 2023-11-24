@@ -42,6 +42,7 @@ const ChatRoom = (props: Props) => {
           onKeyDown={props.onKeyDown}
           disabled={props.disabled}
           placeholder="輸入文字"
+          aria-label="message input"
         />
       </div>
     </div>
