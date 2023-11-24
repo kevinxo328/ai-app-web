@@ -1,10 +1,16 @@
 import { usePostChatCompletion } from "@/apis/api";
-import ChatRoom, { ChatRoomState } from "@/components/chatroom/chat-room";
+import ChatRoom, {
+  ChatRoomState,
+  RoleEnum,
+} from "@/components/chatroom/chat-room";
 import { useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
+import { getApiUrl } from "@/lib/apiClient";
+import { ReqChatCompletion } from "@/types/api";
 
 const defaultSysPrompt =
   "You are an AI assistant that helps people find information.";
@@ -15,9 +21,14 @@ const ChatBot = () => {
     input: "",
   });
 
-  const [llmParams, setLLMParams] = useState({
+  const [isStreaming, setIsStreaming] = useState(false);
+
+  const [llmParams, setLLMParams] = useState<
+    Omit<ReqChatCompletion, "user_prompt">
+  >({
     temperature: 0,
     sys_prompt: defaultSysPrompt,
+    stream: true,
   });
 
   const postChatCompletion = usePostChatCompletion({
@@ -26,7 +37,7 @@ const ChatBot = () => {
       setChatRoom((pre) => ({
         chats: [
           ...pre.chats,
-          { role: "ai", message: data?.choices?.[0]?.message?.content },
+          { role: RoleEnum.ai, message: data?.choices?.[0]?.message?.content },
         ],
         input: "",
       }));
@@ -36,7 +47,7 @@ const ChatBot = () => {
         chats: [
           ...pre.chats,
           {
-            role: "ai",
+            role: RoleEnum.ai,
             message: err?.response?.data?.detail || "系統錯誤，請聯絡管理員",
           },
         ],
@@ -52,15 +63,51 @@ const ChatBot = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key.toLowerCase() !== "enter") return;
     setChatRoom((pre) => ({
-      chats: [...pre.chats, { role: "human", message: pre.input }],
+      chats: [...pre.chats, { role: RoleEnum.human, message: pre.input }],
       input: "",
     }));
 
-    postChatCompletion.mutate({
+    const data = {
       user_prompt: chatRoom.input.trim(),
-      temperature: llmParams.temperature,
-      sys_prompt: llmParams.sys_prompt.trim(),
-    });
+      ...llmParams,
+    };
+
+    if (llmParams.stream) {
+      return fetchEventSource(getApiUrl(`/openai/chat_completion`), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        async onopen() {
+          setIsStreaming(true);
+        },
+        async onmessage(msg) {
+          setChatRoom((pre) => {
+            const history = [...pre.chats];
+
+            if (history[history.length - 1].role === RoleEnum.ai) {
+              history[history.length - 1].message += msg?.data;
+            } else {
+              history.push({
+                role: RoleEnum.ai,
+                message: msg.data as string,
+              });
+            }
+
+            return {
+              ...pre,
+              chats: [...history],
+            };
+          });
+        },
+        async onclose() {
+          setIsStreaming(false);
+        },
+      });
+    }
+
+    postChatCompletion.mutate({ ...data });
   };
 
   return (
@@ -70,7 +117,7 @@ const ChatBot = () => {
           chatRoom={chatRoom}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          disabled={postChatCompletion.isLoading}
+          disabled={postChatCompletion.isLoading || isStreaming}
         />
       </div>
       <div className="border-l w-[400px] max-h-screen overflow-auto">
@@ -86,7 +133,7 @@ const ChatBot = () => {
             </div>
             <Slider
               id="temperature"
-              defaultValue={[llmParams.temperature]}
+              defaultValue={[llmParams.temperature as number]}
               step={0.1}
               max={1}
               onValueChange={(e) =>
