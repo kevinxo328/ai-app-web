@@ -1,11 +1,18 @@
 import { usePostOpenAI } from "@/apis/api";
 import ChatRoom, { ChatRoomState } from "@/components/chatroom/chat-room";
 import { useState } from "react";
+import { Slider } from "@/components/ui/slider";
+import { Label } from "@radix-ui/react-label";
+import { Input } from "@/components/ui/input";
 
 const ChatBot = () => {
   const [chatRoom, setChatRoom] = useState<ChatRoomState>({
     chats: [],
     input: "",
+  });
+
+  const [llmParams, setLLMParams] = useState({
+    temperature: 0,
   });
 
   const postOpenAI = usePostOpenAI({
@@ -45,14 +52,38 @@ const ChatBot = () => {
   };
 
   return (
-    <>
-      <ChatRoom
-        chatRoom={chatRoom}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        disabled={postOpenAI.isLoading}
-      />
-    </>
+    <div className="flex">
+      <div className="p-4 w-full">
+        <ChatRoom
+          chatRoom={chatRoom}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          disabled={postOpenAI.isLoading}
+        />
+      </div>
+      <div className="border w-[300px] max-h-screen overflow-hidden">
+        <div className="p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <Label htmlFor="temperature">Temperature</Label>
+            <Input
+              value={llmParams.temperature}
+              className="w-[50px] h-[24px]"
+              disabled
+            />
+          </div>
+          <Slider
+            id="temperature"
+            defaultValue={[llmParams.temperature]}
+            step={0.1}
+            max={1}
+            onValueChange={(e) =>
+              setLLMParams((pre) => ({ ...pre, temperature: e[0] }))
+            }
+            aria-label="temperature"
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 
