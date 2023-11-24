@@ -1,5 +1,5 @@
 import { AxiosError, AxiosResponse } from "axios";
-import { UseMutationOptions } from "react-query";
+import { UseMutationOptions, UseQueryOptions } from "react-query";
 
 // https://majidlotfinia.medium.com/react-query-best-practices-separating-concerns-with-custom-hooks-3f1bc9051fa2
 
@@ -7,19 +7,53 @@ export type GlobalError = {
   detail: string;
 };
 
-export type MutationOptions<ResponseData, ErrorData = GlobalError> =
+export type MutationOptions<
+  ResponseData,
+  RequestData = string,
+  ErrorData = GlobalError,
+> =
   | Omit<
       UseMutationOptions<
         AxiosResponse<ResponseData>,
         AxiosError<ErrorData>,
-        string,
+        RequestData,
         unknown
       >,
       "mutationFn"
     >
   | undefined;
 
-export type ResOpenAI = {
-  res: Record<string, unknown>;
-  content: string;
+export type QueryOptions<ResponseData, ErrorData = GlobalError> =
+  | Omit<
+      UseQueryOptions<
+        AxiosResponse<ResponseData>,
+        AxiosError<ErrorData>,
+        AxiosResponse<ResponseData>,
+        string
+      >,
+      "queryKey" | "queryFn"
+    >
+  | undefined;
+
+export type ReqChatCompletion = {
+  user_prompt: string;
+  temperature?: number;
+  sys_prompt?: string;
+  model?: string;
 };
+
+export type ResChatCompletion = {
+  id?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  choices: Array<Record<string, any>>;
+  created?: string;
+  model?: string;
+  object?: string;
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+};
+
+export type ResModels = Array<{ deployment_id: string; model: string }>;

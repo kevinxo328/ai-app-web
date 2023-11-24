@@ -17,18 +17,18 @@ describe("ChatBot", () => {
         <QueryClientProvider client={queryClient}>
           <ChatBot />
         </QueryClientProvider>
-      </MemoryRouter>,
+      </MemoryRouter>
     );
   });
 
   it("renders input", async () => {
-    const input = await screen.findByPlaceholderText("輸入文字");
+    const input = await screen.findByLabelText("message input");
     expect(input).toBeInTheDocument();
   });
 
   it("input text", async () => {
     // console.log(server.listHandlers());
-    const input = await screen.findByPlaceholderText("輸入文字");
+    const input = await screen.findByLabelText("message input");
     const test = "測試123";
 
     await user.type(input, test);
@@ -36,8 +36,5 @@ describe("ChatBot", () => {
 
     await user.keyboard("{Enter}");
     expect(input).toHaveValue("");
-    //
-    // const target = await screen.findByText(test);
-    // expect(target).toBeInTheDocument();
   });
 });

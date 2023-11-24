@@ -1,5 +1,6 @@
 import { rest } from "msw";
 import { getApiUrl } from "@/lib/apiClient.ts";
+import { ResChatCompletion } from "@/types/api";
 
 export const handlers = [
   rest.post("/login", (_req, res, ctx) => {
@@ -35,14 +36,19 @@ export const handlers = [
     );
   }),
 
-  rest.post(getApiUrl("/openai/chat_completion"), (req, res, ctx) => {
-    const text = req.url.searchParams.get("message");
-    return res(
-      ctx.status(200),
-      ctx.delay(2000),
-      ctx.json({
-        content: text,
-      })
-    );
+  rest.post(getApiUrl("/openai/chat_completion"), async (req, res, ctx) => {
+    const body = await req.json();
+    const text = body?.user_prompt;
+
+    const json: ResChatCompletion = {
+      choices: [
+        {
+          message: {
+            content: text,
+          },
+        },
+      ],
+    };
+    return res(ctx.status(200), ctx.delay(2000), ctx.json(json));
   }),
 ];
