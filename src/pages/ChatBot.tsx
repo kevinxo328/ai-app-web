@@ -73,7 +73,7 @@ const ChatBot = () => {
           disabled={postChatCompletion.isLoading}
         />
       </div>
-      <div className="border w-[400px] max-h-screen overflow-hidden">
+      <div className="border-l w-[400px] max-h-screen overflow-auto">
         <div className="p-4">
           <div className="mb-8">
             <div className="mb-3 flex items-center justify-between">
