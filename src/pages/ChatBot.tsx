@@ -59,7 +59,7 @@ const ChatBot = () => {
     postChatCompletion.mutate({
       user_prompt: chatRoom.input.trim(),
       temperature: llmParams.temperature,
-      system_prompt: llmParams.sys_prompt.trim(),
+      sys_prompt: llmParams.sys_prompt.trim(),
     });
   };
 

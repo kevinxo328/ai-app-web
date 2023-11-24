@@ -38,7 +38,7 @@ export type QueryOptions<ResponseData, ErrorData = GlobalError> =
 export type ReqChatCompletion = {
   user_prompt: string;
   temperature?: number;
-  system_prompt?: string;
+  sys_prompt?: string;
   model?: string;
 };
 
