@@ -1,6 +1,11 @@
 import { useMutation, useQuery } from "react-query";
 import { apiClient, getApiUrl } from "@/lib/apiClient.ts";
-import { MutationOptions, ResOpenAI } from "@/types/api";
+import {
+  MutationOptions,
+  QueryOptions,
+  ResModels,
+  ResOpenAI,
+} from "@/types/api";
 
 export function useGetUser() {
   return useQuery("/user", async () => {
@@ -16,4 +21,12 @@ export function usePostOpenAI(options?: MutationOptions<ResOpenAI>) {
       getApiUrl(`/openai/chat_completion?${query.toString()}`)
     );
   }, options);
+}
+
+export function useGetModels(options?: QueryOptions<ResModels>) {
+  return useQuery(
+    "/openai/models",
+    async () => await apiClient.get(getApiUrl(`/openai/models`)),
+    options
+  );
 }
