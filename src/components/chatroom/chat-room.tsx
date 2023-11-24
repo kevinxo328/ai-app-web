@@ -35,7 +35,7 @@ const ChatRoom = (props: Props) => {
           </div>
         ))}
       </ScrollArea>
-      <div className={`${containerStyle}`}>
+      <div className={`${containerStyle} w-[calc(100%_-_8px)]`}>
         <Input
           value={props.chatRoom.input}
           onChange={props.onChange}
