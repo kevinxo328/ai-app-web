@@ -21,6 +21,7 @@ type Props = {
   chatRoom: ChatRoomState;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onComposition?: React.CompositionEventHandler<HTMLInputElement>;
   disabled?: boolean;
 };
 
@@ -43,6 +44,9 @@ const ChatRoom = (props: Props) => {
           value={props.chatRoom.input}
           onChange={props.onChange}
           onKeyDown={props.onKeyDown}
+          onCompositionStart={props.onComposition}
+          onCompositionUpdate={props.onComposition}
+          onCompositionEnd={props.onComposition}
           disabled={props.disabled}
           placeholder="輸入文字"
           aria-label="message input"

@@ -40,6 +40,7 @@ export type ReqChatCompletion = {
   temperature?: number;
   sys_prompt?: string;
   model?: string;
+  stream?: boolean;
 };
 
 export type ResChatCompletion = {
