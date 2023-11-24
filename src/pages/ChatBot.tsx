@@ -2,8 +2,12 @@ import { usePostChatCompletion } from "@/apis/api";
 import ChatRoom, { ChatRoomState } from "@/components/chatroom/chat-room";
 import { useState } from "react";
 import { Slider } from "@/components/ui/slider";
-import { Label } from "@radix-ui/react-label";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+const defaultSysPrompt =
+  "You are an AI assistant that helps people find information.";
 
 const ChatBot = () => {
   const [chatRoom, setChatRoom] = useState<ChatRoomState>({
@@ -13,6 +17,7 @@ const ChatBot = () => {
 
   const [llmParams, setLLMParams] = useState({
     temperature: 0,
+    sys_prompt: defaultSysPrompt,
   });
 
   const postChatCompletion = usePostChatCompletion({
@@ -51,7 +56,11 @@ const ChatBot = () => {
       input: "",
     }));
 
-    postChatCompletion.mutate({ user_prompt: chatRoom.input });
+    postChatCompletion.mutate({
+      user_prompt: chatRoom.input.trim(),
+      temperature: llmParams.temperature,
+      system_prompt: llmParams.sys_prompt.trim(),
+    });
   };
 
   return (
@@ -64,26 +73,42 @@ const ChatBot = () => {
           disabled={postChatCompletion.isLoading}
         />
       </div>
-      <div className="border w-[300px] max-h-screen overflow-hidden">
+      <div className="border w-[400px] max-h-screen overflow-hidden">
         <div className="p-4">
-          <div className="mb-3 flex items-center justify-between">
-            <Label htmlFor="temperature">Temperature</Label>
-            <Input
-              value={llmParams.temperature}
-              className="w-[50px] h-[24px]"
-              disabled
+          <div className="mb-8">
+            <div className="mb-3 flex items-center justify-between">
+              <Label htmlFor="temperature">Temperature</Label>
+              <Input
+                value={llmParams.temperature}
+                className="w-[50px] h-[24px]"
+                disabled
+              />
+            </div>
+            <Slider
+              id="temperature"
+              defaultValue={[llmParams.temperature]}
+              step={0.1}
+              max={1}
+              onValueChange={(e) =>
+                setLLMParams((pre) => ({ ...pre, temperature: e[0] }))
+              }
+              aria-label="temperature"
             />
           </div>
-          <Slider
-            id="temperature"
-            defaultValue={[llmParams.temperature]}
-            step={0.1}
-            max={1}
-            onValueChange={(e) =>
-              setLLMParams((pre) => ({ ...pre, temperature: e[0] }))
-            }
-            aria-label="temperature"
-          />
+          <div className="mb-8">
+            <Label htmlFor="sys_prompt" className="mb-3">
+              System Prompt
+            </Label>
+            <Textarea
+              id="sys_prompt"
+              value={llmParams.sys_prompt}
+              onChange={(e) =>
+                setLLMParams((pre) => ({ ...pre, sys_prompt: e.target.value }))
+              }
+              rows={8}
+              className="resize-none"
+            />
+          </div>
         </div>
       </div>
     </div>
