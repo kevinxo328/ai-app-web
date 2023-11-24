@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { getApiUrl } from "@/lib/apiClient";
 import { ReqChatCompletion } from "@/types/api";
+import { Switch } from "@/components/ui/switch";
 
 const defaultSysPrompt =
   "You are an AI assistant that helps people find information.";
@@ -122,6 +123,18 @@ const ChatBot = () => {
       </div>
       <div className="border-l w-[400px] max-h-screen overflow-auto">
         <div className="p-4">
+          <div className="mb-8 flex items-center">
+            <Label htmlFor="stream" className="mr-2">
+              Stream
+            </Label>
+            <Switch
+              id="stream"
+              checked={llmParams.stream}
+              onCheckedChange={(e) =>
+                setLLMParams((pre) => ({ ...pre, stream: e }))
+              }
+            />
+          </div>
           <div className="mb-8">
             <div className="mb-3 flex items-center justify-between">
               <Label htmlFor="temperature">Temperature</Label>
