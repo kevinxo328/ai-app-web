@@ -4,7 +4,7 @@ import {
   MutationOptions,
   // QueryOptions,
   // ResModels,
-  ResOpenAI,
+  ResChatCompletion,
 } from "@/types/api";
 
 export function useGetUser() {
@@ -13,7 +13,9 @@ export function useGetUser() {
   });
 }
 
-export function usePostOpenAI(options?: MutationOptions<ResOpenAI>) {
+export function usePostChatCompletion(
+  options?: MutationOptions<ResChatCompletion>
+) {
   return useMutation(async (message: string, temperature: number = 0) => {
     const query = new URLSearchParams();
     query.append("message", message);

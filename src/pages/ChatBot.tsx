@@ -1,4 +1,4 @@
-import { usePostOpenAI } from "@/apis/api";
+import { usePostChatCompletion } from "@/apis/api";
 import ChatRoom, { ChatRoomState } from "@/components/chatroom/chat-room";
 import { useState } from "react";
 import { Slider } from "@/components/ui/slider";
@@ -15,11 +15,14 @@ const ChatBot = () => {
     temperature: 0,
   });
 
-  const postOpenAI = usePostOpenAI({
+  const postChatCompletion = usePostChatCompletion({
     onSuccess: (res) => {
       const { data } = res;
       setChatRoom((pre) => ({
-        chats: [...pre.chats, { role: "ai", message: data?.content }],
+        chats: [
+          ...pre.chats,
+          { role: "ai", message: data?.choices?.[0]?.message?.content },
+        ],
         input: "",
       }));
     },
@@ -48,7 +51,7 @@ const ChatBot = () => {
       input: "",
     }));
 
-    postOpenAI.mutate(chatRoom.input);
+    postChatCompletion.mutate(chatRoom.input);
   };
 
   return (
@@ -58,7 +61,7 @@ const ChatBot = () => {
           chatRoom={chatRoom}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          disabled={postOpenAI.isLoading}
+          disabled={postChatCompletion.isLoading}
         />
       </div>
       <div className="border w-[300px] max-h-screen overflow-hidden">

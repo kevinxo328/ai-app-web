@@ -31,9 +31,18 @@ export type QueryOptions<ResponseData, ErrorData = GlobalError> =
     >
   | undefined;
 
-export type ResOpenAI = {
-  res: Record<string, unknown>;
-  content: string;
+export type ResChatCompletion = {
+  id?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  choices: Array<Record<string, any>>;
+  created?: string;
+  model?: string;
+  object?: string;
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
 };
 
 export type ResModels = Array<{ deployment_id: string; model: string }>;
