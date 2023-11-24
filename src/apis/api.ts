@@ -2,8 +2,8 @@ import { useMutation, useQuery } from "react-query";
 import { apiClient, getApiUrl } from "@/lib/apiClient.ts";
 import {
   MutationOptions,
-  QueryOptions,
-  ResModels,
+  // QueryOptions,
+  // ResModels,
   ResOpenAI,
 } from "@/types/api";
 
