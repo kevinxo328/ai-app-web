@@ -5,7 +5,7 @@ import { RouterProvider } from "react-router-dom";
 import router from "./router/router";
 import { worker } from "@/mocks/browser";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "./lib/reactQuery";
+import { queryClient } from "./libs/reactQuery";
 import { ThemeProvider } from "./contexts/theme-context";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 

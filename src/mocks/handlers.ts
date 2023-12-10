@@ -1,5 +1,5 @@
 import { rest } from "msw";
-import { getApiUrl } from "@/lib/apiClient.ts";
+import { getApiUrl } from "@/libs/apiClient";
 import { ResChatCompletion } from "@/types/api";
 
 export const handlers = [

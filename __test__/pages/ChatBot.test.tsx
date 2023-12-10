@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import ChatBot from "@/pages/ChatBot";
 import { MemoryRouter } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "@/lib/reactQuery";
+import { queryClient } from "@/libs/reactQuery";
 import { userEvent } from "@testing-library/user-event";
 
 // https://dev.to/pacheco/configure-vitest-with-react-testing-library-5cbb

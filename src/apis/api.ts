@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { apiClient, getApiUrl } from "@/lib/apiClient.ts";
+import { apiClient, getApiUrl } from "@/libs/apiClient";
 import {
   MutationOptions,
   ReqChatCompletion,

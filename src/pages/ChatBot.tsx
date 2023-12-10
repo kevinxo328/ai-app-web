@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
-import { getApiUrl } from "@/lib/apiClient";
+import { getApiUrl } from "@/libs/apiClient";
 import { ReqChatCompletion } from "@/types/api";
 import { Switch } from "@/components/ui/switch";
 
