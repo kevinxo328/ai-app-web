@@ -2,7 +2,7 @@ import { Chat, RoleEnum } from "./chat-room";
 import { RiRobot2Fill } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
 import { Avatar } from "../ui/avatar";
-import Markdown from "react-markdown";
+import Markdown from "markdown-to-jsx";
 
 type Props = Chat;
 
