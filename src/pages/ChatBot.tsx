@@ -123,7 +123,7 @@ const ChatBot = () => {
           onComposition={(e) =>
             (isComposition.current = e.type !== "compositionend")
           }
-          disabled={postChatCompletion.query.isLoading || isStreaming}
+          disabled={postChatCompletion.query.isPending || isStreaming}
         />
       </div>
       <div className="border-l w-[400px] max-h-screen overflow-auto">

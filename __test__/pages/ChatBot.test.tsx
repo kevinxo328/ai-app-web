@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import ChatBot from "@/pages/ChatBot";
 import { MemoryRouter } from "react-router-dom";
-import { QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/reactQuery";
 import { userEvent } from "@testing-library/user-event";
 

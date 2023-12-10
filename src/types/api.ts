@@ -1,5 +1,10 @@
 import { AxiosError, AxiosResponse } from "axios";
-import { UseMutationOptions, UseQueryOptions } from "react-query";
+import {
+  MutationKey,
+  QueryKey,
+  UseMutationOptions,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 
 // https://majidlotfinia.medium.com/react-query-best-practices-separating-concerns-with-custom-hooks-3f1bc9051fa2
 
@@ -17,7 +22,7 @@ export type MutationOptions<
         AxiosResponse<ResponseData>,
         AxiosError<ErrorData>,
         RequestData,
-        unknown
+        MutationKey
       >,
       "mutationFn"
     >
@@ -29,7 +34,7 @@ export type QueryOptions<ResponseData, ErrorData = GlobalError> =
         AxiosResponse<ResponseData>,
         AxiosError<ErrorData>,
         AxiosResponse<ResponseData>,
-        string
+        QueryKey
       >,
       "queryKey" | "queryFn"
     >

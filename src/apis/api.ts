@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { apiClient, getApiUrl } from "@/lib/apiClient.ts";
 import {
   MutationOptions,
@@ -8,11 +8,11 @@ import {
   ResChatCompletion,
 } from "@/types/api";
 
-export function useGetUser() {
-  return useQuery("/user", async () => {
-    return await apiClient.get(getApiUrl("/user"));
-  });
-}
+// export function useGetUser() {
+//   return useQuery("/user", async () => {
+//     return await apiClient.get(getApiUrl("/user"));
+//   });
+// }
 
 export function usePostChatCompletion(
   options?: MutationOptions<ResChatCompletion, ReqChatCompletion>,
@@ -27,14 +27,18 @@ export function usePostChatCompletion(
   const fetchPostChatCompletions = async (data: ReqChatCompletion) => {
     return await apiClient.request({
       method,
-      url: getApiUrl(`/openai/chat_completion`),
+      url: getApiUrl(endpoint),
       data,
     });
   };
 
   return {
     key,
-    query: useMutation(key, fetchPostChatCompletions, options),
+    query: useMutation({
+      mutationKey: key,
+      mutationFn: fetchPostChatCompletions,
+      ...options,
+    }),
   };
 }
 
