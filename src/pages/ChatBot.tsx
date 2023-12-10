@@ -110,7 +110,7 @@ const ChatBot = () => {
       });
     }
 
-    postChatCompletion.mutate({ ...data });
+    postChatCompletion.query.mutate({ ...data });
   };
 
   return (
@@ -123,7 +123,7 @@ const ChatBot = () => {
           onComposition={(e) =>
             (isComposition.current = e.type !== "compositionend")
           }
-          disabled={postChatCompletion.isLoading || isStreaming}
+          disabled={postChatCompletion.query.isLoading || isStreaming}
         />
       </div>
       <div className="border-l w-[400px] max-h-screen overflow-auto">

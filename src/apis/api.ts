@@ -15,13 +15,27 @@ export function useGetUser() {
 }
 
 export function usePostChatCompletion(
-  options?: MutationOptions<ResChatCompletion, ReqChatCompletion>
+  options?: MutationOptions<ResChatCompletion, ReqChatCompletion>,
+  stateKey?: string | Record<string, unknown>
 ) {
-  return useMutation(async (data: ReqChatCompletion) => {
-    return await apiClient.post(getApiUrl(`/openai/chat_completion`), {
-      ...data,
+  const method = "post";
+  const endpoint = "/openai/chat_completion";
+  const key: unknown[] = [endpoint, method];
+
+  stateKey && key.push(stateKey);
+
+  const fetchPostChatCompletions = async (data: ReqChatCompletion) => {
+    return await apiClient.request({
+      method,
+      url: getApiUrl(`/openai/chat_completion`),
+      data,
     });
-  }, options);
+  };
+
+  return {
+    key,
+    query: useMutation(key, fetchPostChatCompletions, options),
+  };
 }
 
 // export function useGetModels(options?: QueryOptions<ResModels>) {
