@@ -2,6 +2,7 @@ import { Chat, RoleEnum } from "./chat-room";
 import { RiRobot2Fill } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
 import { Avatar } from "../ui/avatar";
+import Markdown from "react-markdown";
 
 type Props = Chat;
 
@@ -11,7 +12,9 @@ const ChatMessage = (props: Props) => {
       <Avatar className="justify-center items-center">
         {props.role === RoleEnum.ai ? <RiRobot2Fill /> : <FaUser />}
       </Avatar>
-      <p className="mt-2">{props.message}</p>
+      <div className="mt-2">
+        <Markdown>{props.message}</Markdown>
+      </div>
     </div>
   );
 };
