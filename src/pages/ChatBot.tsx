@@ -1,8 +1,4 @@
 import { usePostChatCompletion } from "@/apis/api";
-import ChatRoom, {
-  ChatRoomState,
-  RoleEnum,
-} from "@/components/chatroom/chat-room";
 import { useRef, useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -12,18 +8,15 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { getApiUrl } from "@/libs/apiClient";
 import { ReqChatCompletion } from "@/types/api";
 import { Switch } from "@/components/ui/switch";
+import { RoleEnum, useChatStore } from "@/stores/chat.store";
+import ChatRoom from "@/components/chatroom/chat-room";
 
 const defaultSysPrompt =
   "You are an AI assistant that helps people find information.";
 
 const ChatBot = () => {
-  const [chatRoom, setChatRoom] = useState<ChatRoomState>({
-    chats: [],
-    input: "",
-  });
-
+  const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
-
   const [llmParams, setLLMParams] = useState<
     Omit<ReqChatCompletion, "user_prompt">
   >({
@@ -31,51 +24,44 @@ const ChatBot = () => {
     sys_prompt: defaultSysPrompt,
     stream: true,
   });
+  const addMessage = useChatStore((state) => state.addMessage);
 
   const isComposition = useRef(false);
 
   const postChatCompletion = usePostChatCompletion({
     onSuccess: (res) => {
       const { data } = res;
-      setChatRoom((pre) => ({
-        chats: [
-          ...pre.chats,
-          { role: RoleEnum.ai, message: data?.choices?.[0]?.message?.content },
-        ],
-        input: "",
-      }));
+      addMessage({
+        role: RoleEnum.ai,
+        message: data?.choices?.[0]?.message?.content,
+      });
+
+      setInput("");
     },
     onError: (err) => {
-      setChatRoom((pre) => ({
-        chats: [
-          ...pre.chats,
-          {
-            role: RoleEnum.ai,
-            message: err?.response?.data?.detail || "系統錯誤，請聯絡管理員",
-          },
-        ],
-        input: "",
-      }));
+      addMessage({
+        role: RoleEnum.ai,
+        message: err?.response?.data?.detail || "系統錯誤，請聯絡管理員",
+      });
+      setInput("");
     },
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChatRoom((pre) => ({ ...pre, input: e.target.value }));
+    setInput(e.target.value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key.toLowerCase() !== "enter" || isComposition.current) return;
-    setChatRoom((pre) => ({
-      chats: [...pre.chats, { role: RoleEnum.human, message: pre.input }],
-      input: "",
-    }));
+
+    addMessage({ role: RoleEnum.human, message: input });
 
     const data = {
-      user_prompt: chatRoom.input.trim(),
+      user_prompt: input.trim(),
       ...llmParams,
     };
 
-    setChatRoom((pre) => ({ ...pre, input: "" }));
+    setInput("");
 
     if (llmParams.stream) {
       setIsStreaming(true);
@@ -86,23 +72,12 @@ const ChatBot = () => {
         },
         body: JSON.stringify(data),
         async onmessage(msg) {
-          setChatRoom((pre) => {
-            const history = [...pre.chats];
-
-            if (history[history.length - 1].role === RoleEnum.ai) {
-              history[history.length - 1].message += msg?.data;
-            } else {
-              history.push({
-                role: RoleEnum.ai,
-                message: msg.data as string,
-              });
-            }
-
-            return {
-              chats: [...history],
-              input: "",
-            };
+          addMessage({
+            role: RoleEnum.ai,
+            message: msg?.data,
+            stream: true,
           });
+          setInput("");
         },
         async onclose() {
           setIsStreaming(false);
@@ -117,7 +92,7 @@ const ChatBot = () => {
     <div className="flex">
       <div className="p-4 w-full">
         <ChatRoom
-          chatRoom={chatRoom}
+          input={input}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onComposition={(e) =>
