@@ -1,4 +1,4 @@
-import { usePostChatCompletion } from "@/apis/api";
+import { usePostChatCompletion } from "@/services/openai";
 import { useRef, useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
