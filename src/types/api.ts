@@ -8,13 +8,13 @@ import {
 
 // https://majidlotfinia.medium.com/react-query-best-practices-separating-concerns-with-custom-hooks-3f1bc9051fa2
 
-export type GlobalError = {
+export type GlobalError = AxiosError<{
   detail: string;
-};
+}>;
 
-export type MutationOptions<
-  ResponseData,
-  RequestData = string,
+export type AppMutationOptions<
+  ResponseData = unknown,
+  RequestData = unknown,
   ErrorData = GlobalError,
 > =
   | Omit<
@@ -28,7 +28,7 @@ export type MutationOptions<
     >
   | undefined;
 
-export type QueryOptions<ResponseData, ErrorData = GlobalError> =
+export type AppQueryOptions<ResponseData = unknown, ErrorData = GlobalError> =
   | Omit<
       UseQueryOptions<
         AxiosResponse<ResponseData>,

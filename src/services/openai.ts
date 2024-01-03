@@ -1,21 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
 import { apiClient, getApiUrl } from "@/libs/apiClient";
 import {
-  MutationOptions,
+  AppMutationOptions,
   ReqChatCompletion,
   // QueryOptions,
   // ResModels,
   ResChatCompletion,
 } from "@/types/api";
 
-// export function useGetUser() {
-//   return useQuery("/user", async () => {
-//     return await apiClient.get(getApiUrl("/user"));
-//   });
-// }
-
 export function usePostChatCompletion(
-  options?: MutationOptions<ResChatCompletion, ReqChatCompletion>,
+  options?: AppMutationOptions<ResChatCompletion, ReqChatCompletion>,
   stateKey?: string | Record<string, unknown>
 ) {
   const method = "post";

@@ -1,34 +1,87 @@
-import { useState } from "react";
-import reactLogo from "@/assets/react.svg";
-import viteLogo from "/vite.svg";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { usePostToken } from "@/services/auth";
+import {
+  Form,
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormField,
+} from "@/components/ui/form";
+import { useAuthStore } from "@/stores/auth.store";
+import { useNavigate } from "react-router-dom";
+import { useAuthForm } from "@/hooks/useAuthForm";
+import * as z from "zod";
 
 const Login = () => {
-  const [count, setCount] = useState(0);
+  const { form, formSchema } = useAuthForm();
+
+  const authStore = useAuthStore();
+  const navigate = useNavigate();
+
+  const postToken = usePostToken({
+    onSuccess: (res) => {
+      authStore.setState(res);
+      localStorage.setItem("access_token", res.access_token);
+      localStorage.setItem("refresh_token", res.refresh_token);
+      navigate("/chatbot");
+    },
+    onError: (err) => {
+      console.error(err?.response?.data?.detail);
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    postToken.query.mutate({ ...values });
+  }
+
   return (
     <>
-      <div>
-        <Link to="/chatbot">Go To Chatbot</Link>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="h-screen flex items-center justify-center">
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 min-w-[370px]"
+          >
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="password" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              className="w-full"
+              disabled={postToken.query.isPending}
+              type="submit"
+            >
+              Login
+            </Button>
+          </form>
+        </Form>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <Button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   );
 };
