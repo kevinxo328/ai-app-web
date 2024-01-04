@@ -23,8 +23,6 @@ const Login = () => {
   const postToken = usePostToken({
     onSuccess: (res) => {
       authStore.setState(res);
-      localStorage.setItem("access_token", res.access_token);
-      localStorage.setItem("refresh_token", res.refresh_token);
       navigate("/chatbot");
     },
     onError: (err) => {

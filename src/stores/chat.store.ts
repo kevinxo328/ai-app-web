@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 
 export enum RoleEnum {
   ai = "ai",
@@ -22,27 +23,29 @@ type Actions = {
   }) => void;
 };
 
-export const useChatStore = create<State & Actions>((set) => ({
-  messages: [],
-  addMessage: (params: {
-    message: string;
-    role: keyof typeof RoleEnum;
-    stream?: boolean;
-  }) =>
-    set((state) => {
-      if (
-        params.stream &&
-        state.messages[state.messages.length - 1].role === RoleEnum.ai
-      ) {
-        state.messages[state.messages.length - 1].message += params.message;
-        return { messages: [...state.messages] };
-      }
+export const useChatStore = create<State & Actions>()(
+  devtools((set) => ({
+    messages: [],
+    addMessage: (params: {
+      message: string;
+      role: keyof typeof RoleEnum;
+      stream?: boolean;
+    }) =>
+      set((state) => {
+        if (
+          params.stream &&
+          state.messages[state.messages.length - 1].role === RoleEnum.ai
+        ) {
+          state.messages[state.messages.length - 1].message += params.message;
+          return { messages: [...state.messages] };
+        }
 
-      return {
-        messages: [
-          ...state.messages,
-          { message: params.message, role: params.role },
-        ],
-      };
-    }),
-}));
+        return {
+          messages: [
+            ...state.messages,
+            { message: params.message, role: params.role },
+          ],
+        };
+      }),
+  }))
+);
