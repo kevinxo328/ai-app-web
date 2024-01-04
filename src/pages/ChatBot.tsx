@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { getApiUrl } from "@/libs/apiClient";
-import { ReqChatCompletion } from "@/types/api";
 import { Switch } from "@/components/ui/switch";
 import { RoleEnum, useChatStore } from "@/stores/chat.store";
 import ChatRoom from "@/components/chatroom/chat-room";
+import { ChatCompletionConfig } from "@/types/openai";
 
 const defaultSysPrompt =
   "You are an AI assistant that helps people find information.";
@@ -18,7 +18,7 @@ const ChatBot = () => {
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [llmParams, setLLMParams] = useState<
-    Omit<ReqChatCompletion, "user_prompt">
+    Omit<ChatCompletionConfig, "user_prompt">
   >({
     temperature: 0,
     sys_prompt: defaultSysPrompt,
@@ -30,10 +30,9 @@ const ChatBot = () => {
 
   const postChatCompletion = usePostChatCompletion({
     onSuccess: (res) => {
-      const { data } = res;
       addMessage({
         role: RoleEnum.ai,
-        message: data?.choices?.[0]?.message?.content,
+        message: res?.choices?.[0]?.message?.content,
       });
 
       setInput("");

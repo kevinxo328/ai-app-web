@@ -1,6 +1,6 @@
 import { rest } from "msw";
 import { getApiUrl } from "@/libs/apiClient";
-import { ResChatCompletion } from "@/types/api";
+import { ChatCompletion } from "@/types/openai";
 
 export const handlers = [
   rest.post("/login", (_req, res, ctx) => {
@@ -40,7 +40,7 @@ export const handlers = [
     const body = await req.json();
     const text = body?.user_prompt;
 
-    const json: ResChatCompletion = {
+    const json: ChatCompletion = {
       choices: [
         {
           message: {
