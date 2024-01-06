@@ -2,10 +2,10 @@ import { apiClient, getApiUrl } from "@/libs/apiClient";
 import { GlobalError } from "@/types/api";
 import { Token } from "@/types/auth";
 import { CreateUser } from "@/types/user";
-import { MutateOptions, useMutation } from "@tanstack/react-query";
+import { UseMutationOptions, useMutation } from "@tanstack/react-query";
 
 export function usePostToken(
-  options?: MutateOptions<Token, GlobalError, CreateUser>,
+  options?: UseMutationOptions<Token, GlobalError, CreateUser>,
   stateKey?: string | Record<string, unknown>
 ) {
   const method = "post";

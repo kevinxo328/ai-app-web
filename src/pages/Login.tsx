@@ -30,6 +30,7 @@ const Login = () => {
       console.error(err?.response?.data?.detail);
       toast.error(err?.response?.data?.detail || "Something went wrong");
     },
+    retry: 1,
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
