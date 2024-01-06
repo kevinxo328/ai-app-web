@@ -1,12 +1,11 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { JwtPayload, jwtDecode } from "jwt-decode";
+import { Token } from "@/types/auth";
 
-type State = {
-  access_token: string;
-  refresh_token: string;
-  expires_in: number;
-  token_type: string;
-  scope?: string;
+type State = Token & {
+  username?: string;
+  expires_at?: number;
 };
 
 type Actions = {
@@ -22,7 +21,14 @@ export const useAuthStore = create<State & Actions>()(
         expires_in: 0,
         token_type: "",
         scope: "",
-        setState: (params: State) => set(params),
+        setState: (params: State) => {
+          const decocded = jwtDecode<JwtPayload>(params.access_token);
+          set({
+            ...params,
+            username: decocded["sub"],
+            expires_at: decocded["exp"],
+          });
+        },
       }),
       {
         name: "auth-store",

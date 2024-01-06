@@ -1,5 +1,5 @@
 import { MutateOptions, useMutation } from "@tanstack/react-query";
-import { apiClient, getApiUrl } from "@/libs/apiClient";
+import { authClient } from "@/libs/apiClient";
 import { ChatCompletion, ChatCompletionConfig } from "@/types/openai";
 import { GlobalError } from "@/types/api";
 
@@ -14,13 +14,10 @@ export function usePostChatCompletion(
   stateKey && key.push(stateKey);
 
   const fetchPostChatCompletions = async (data: ChatCompletionConfig) => {
-    const res = await apiClient.request<ChatCompletion>({
+    const res = await authClient.request<ChatCompletion>({
       method,
-      url: getApiUrl(endpoint),
+      url: endpoint,
       data,
-      // headers: {
-      //   Authorization: `Bearer ${access_token}`,
-      // },
     });
 
     return res.data;

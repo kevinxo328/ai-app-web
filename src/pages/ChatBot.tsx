@@ -10,11 +10,13 @@ import { Switch } from "@/components/ui/switch";
 import { RoleEnum, useChatStore } from "@/stores/chat.store";
 import ChatRoom from "@/components/chatroom/chat-room";
 import { ChatCompletionConfig } from "@/types/openai";
+import { useNavigate } from "react-router-dom";
 
 const defaultSysPrompt =
   "You are an AI assistant that helps people find information.";
 
 const ChatBot = () => {
+  const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [llmParams, setLLMParams] = useState<
@@ -22,7 +24,7 @@ const ChatBot = () => {
   >({
     temperature: 0,
     sys_prompt: defaultSysPrompt,
-    stream: true,
+    stream: false,
   });
   const addMessage = useChatStore((state) => state.addMessage);
 
@@ -38,6 +40,11 @@ const ChatBot = () => {
       setInput("");
     },
     onError: (err) => {
+      //  TODO: need to handle 401 error globally
+      if (err.response?.status === 401) {
+        navigate("/", { replace: true, state: { from: "/chatbot" } });
+      }
+
       addMessage({
         role: RoleEnum.ai,
         message: err?.response?.data?.detail || "系統錯誤，請聯絡管理員",
@@ -112,6 +119,7 @@ const ChatBot = () => {
               onCheckedChange={(e) =>
                 setLLMParams((pre) => ({ ...pre, stream: e }))
               }
+              disabled
             />
           </div>
           <div className="mb-8">
