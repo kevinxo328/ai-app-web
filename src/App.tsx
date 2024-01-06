@@ -7,6 +7,7 @@ import ThemeToggle from "@/components/theme-toggle";
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [asideItems, setAsideItems] = useState([
     // { label: "home", path: "/", active: false },
@@ -18,13 +19,10 @@ function App() {
     // { label: "login", path: "/login", active: false },
   ]);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
-    navigate("/chatbot");
-  }, [navigate]);
-
-  useEffect(() => {
+    if (location.pathname === "/") {
+      navigate("/chatbot");
+    }
     setAsideItems((pre) =>
       pre.map((item) => ({ ...item, active: item.path === location.pathname }))
     );
