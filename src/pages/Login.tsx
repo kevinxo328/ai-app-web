@@ -13,6 +13,7 @@ import { useAuthStore } from "@/stores/auth.store";
 import { useNavigate } from "react-router-dom";
 import { useAuthForm } from "@/hooks/useAuthForm";
 import * as z from "zod";
+import { toast } from "sonner";
 
 const Login = () => {
   const { form, formSchema } = useAuthForm();
@@ -27,6 +28,7 @@ const Login = () => {
     },
     onError: (err) => {
       console.error(err?.response?.data?.detail);
+      toast.error(err?.response?.data?.detail || "Something went wrong");
     },
   });
 
